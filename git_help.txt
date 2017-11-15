@@ -1,0 +1,8 @@
+Add file to push:
+	git add <filename>
+Commit push with message
+	git commit -m "message"
+Check push status
+	git status
+Push files
+	git push -u origin <branch name>
