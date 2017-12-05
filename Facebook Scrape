@@ -1,0 +1,12 @@
+from BeautifulSoup import BeautifulSoup
+import urllib2
+
+websiteCode = urllib2.urlopen("https://www.facebook.com/rob.mann.16503").read()
+soup = BeautifulSoup(websiteCode)
+
+images = []
+images = soup.findAll('img')
+
+for image in images:
+  print(image.get('src'))
+
