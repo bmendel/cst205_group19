@@ -1,10 +1,13 @@
 import sys
 import math
+import requests
 from PyQt5.QtWidgets import (QApplication, QWidget, QLabel, QPushButton,
                                 QLineEdit, QHBoxLayout, QVBoxLayout, QComboBox)
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QPixmap
 from PIL import Image
+from io import BytesIO
+
 
 def none():
     image_id = "profile"
@@ -171,7 +174,11 @@ class Window(QWidget):
     def on_click(self):
         manipulation = self.my_combo_box.currentText()
         pic_filter = self.other_combo_box.currentText()
-        line_edit_value = self.my_line_edit.text()
+        url_link = self.my_line_edit.text()
+        response = requests.get(f"{url_link}")
+        bytes = BytesIO(response.content)
+        image = Image.open(bytes)
+        image.save("images/profile.jpg")
         self.response_label.setText("My Profile Pic")
         if manipulation == "negative":
             negative()
