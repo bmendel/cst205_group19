@@ -1,7 +1,16 @@
-from PIL import Image
-import math
+###########################################################
+# Filename: filter.py
+# Author: Brandon Mendel
+# Course: CST 205
+# Last Updated: 12/10/17
+# 
+# Applies filters and templates to images
+###########################################################
 
-def add_filter(image, filter):
+from PIL import Image
+
+# Places a template over the image using chroma key compositing
+def add_template(image, filter):
 	chroma_key = (255, 255, 255, 255)
 	s_image = Image.open(image)
 	filter_image = Image.open(f'templates/{filter}.png')
@@ -12,6 +21,7 @@ def add_filter(image, filter):
 				s_image.putpixel((x, y), filter_image.getpixel((x, y)))
 	s_image.save(image)
 
+# Doubles the size of the image, to get a clearer view of the profile
 def bigger(image):
 	s_image = Image.open(image)
 	width, height = s_image.size
@@ -28,21 +38,8 @@ def bigger(image):
 			target_y += 2
 		target_x += 2
 	canvas.save(image)
-	
-def smaller(image):
-	s_image = Image.open(image)
-	width, height = s_image.size
-	canvas = Image.new('RGB', (math.ceil(width/2),math.ceil(height/2)), 'white')
-	target_x = 0
-	for source_x in range(0, s_image.width, 2):
-		target_y = 0
-		for source_y in range(0, s_image.height, 2):
-			color = s_image.getpixel((source_x, source_y))
-			canvas.putpixel((target_x, target_y), color)
-			target_y += 1
-		target_x += 1
-	canvas.save(image)
 
+# Makes the image negative
 def negative(image):
 	s_image = Image.open(image)
 	new_list = []
@@ -52,6 +49,7 @@ def negative(image):
 	s_image.putdata(new_list)
 	s_image.save(image)
 
+# Returns a list of greyscale pixel values
 def grayscale(picture):
 	new_list = []
 	for p in picture.getdata():
@@ -63,6 +61,7 @@ def grayscale(picture):
 		new_list.append(temp)
 	return new_list
 
+# Makes the image grayscale
 def grayscale_create(image):
 	s_image = Image.open(image)
 	new_list = []
@@ -76,6 +75,7 @@ def grayscale_create(image):
 	s_image.putdata(new_list)
 	s_image.save(image)
 
+# Makes the image tinted in sepia
 def sepia_tint(image):
 	s_image = Image.open(image)
 	width, height = s_image.size
@@ -84,7 +84,7 @@ def sepia_tint(image):
 	pic_data = grayscale(s_image)
 
 	for p in pic_data:
-	# tint shadows
+		# tint shadows
 		if p[0] < 63:
 			red_val = int(p[0] * 1.1)
 			green_val = p[1]
@@ -103,6 +103,7 @@ def sepia_tint(image):
 				red_val = 255
 			green_val = p[1]
 			blue_val = int(p[2] * 0.5)
+			
 		temp_list.append((red_val, green_val, blue_val))
 	s_image.putdata(temp_list)
 	s_image.save(image)
